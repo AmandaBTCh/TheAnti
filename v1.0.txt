@@ -1,0 +1,65 @@
+TheAnti (version 1.0)
+===================================
+TheAnti is going to be an extremely simple AI for Texas Hold'em.
+It will only base it's play off of 4 factors:
+
+1. Its equity against a random range
+2. Bet size to pot ratio
+3. Position
+4. Randomness
+
+Because of this, TheAnti v1.0 should be very weak and exploitable in that it will not
+understand any complex strategies such as blockers, bluff catchers, board textures, or
+perceived ranges.
+
+I expect it to be especially prone to value bets as it assumes its opponent has
+a random range.
+
+In the future, I will build in logic for more complex ranges, equities, and showdown value.
+After that, will come the more complex strategies used in the game.
+
+Decision Making
+===================================
+1. Equity against ATC
+TheAnti will calculate it's equity pre-flop and on all streets based on the comparison of its cards and two random cards for its opponents. While this is the heart of how to analyze hand strength, it ignores some important factors, but should do for the initial design. Because of this method of calculating hand-strength, TheAnti will never know whether it has a strong value hand or a strong bluffing hand as it has no concept of showdown value. As value hands will have a much higher equity against a random range than bluffs, it is almost definite that the AI will pick hands that are very weak bluffs as a hand such as 98h on Th7c3c would probably only have around 60% equity against a random range and thus might not be seen as a good bluffing candidate, whereas a hand like 2d4s would be as it has very low equity.
+
+It is clear that eventually a concept of showdown value will need to be introduced so that TheAnti knows both how strong its hand is and how much equity it has. A very weak hand in showdown value would not be a very good hand to bluff unless it also had decent equity.
+
+For now though, this should be adequate, especially as it means that TheAnti will have a lot of strong hands on the river which got there but were not bet as TheAnti thought that they were of middling equity on previous streets. Also, the element of randomness, should help to alleviate this to some extent in the short run.
+
+
+The strategy implemented by TheAnti will be to raise hands more frequently the higher the equities are, making sure to throw in checks/raises with both the strongest and weakest hands to balance out the range. Middling equities will not often be bet but will instead go for calls.
+
+2. Sizes and Ratios
+TheAnti will never fold when given the correct bet size to pot to equity ratios. For example, if on the turn TheAnti has 50% equity and it faces a pot-sized bet, it will always call as it needs only 33% equity to continue mathematically. Likewise, if it has 85% equity on the turn, it will most likely raise or re-raise, but of course, will sometimes check. If TheAnti does not have the equity to call, it will sometimes bluff-raise.
+
+While a strategy like this is necessary, it isn't going to work out very well in practice as the AI will not realize that its opponent is not really going to have a range of ATC on a 4-straight, 4-flush board. On such a board, against ATC, TheAnti will likely overvalue 2-pair type hands which have decent equity against random ranges, but are not so good against tight value-bets.
+
+TheAnti will not know about stack to pot-ratio and will most likely be playing with a very deep stack in order to see how it reacts to extremely large bets and to avoid situations where it runs out of chips to work with.
+
+TheAnti will also use standard bet sizing of 2/3 pot on all streets with 2x pot-size opens and re-raises. Thus when blinds are $1/2, the bot would raise to $6, and if raised to $20, the pot would be a total of $26 and the bot would raise to $52. I may change both of these numbers to something closer to 2.2x.
+
+3. Position
+TheAnti will only play HU, so when in position it will not have a limping range. Instead, it will play all hands, but weight the top portion of the range higher than the rest such that can have ATC on the flop. TheAnti will have two modes: one for when action is checked to it, and one for when it is bet into. When led into or OOP and facing a bet, the first will be used. When the pot is limped, or facing a check on the flop, the first will be used, although when OOP, after a pre-flop bet, checking to the raiser will be the default play.
+
+4. Randomness
+In all situations, an element of randomness will be used so that the cards that TheAnti can have will never be obvious from the plays made. When picking hands to bet, check, raise, whenever it makes sense, the decisions will be weighted (often heavily) in certain directions, but will ultimately be random. The same will be true for checking when out of position which will probably be done 80% or more of the time.
+
+It is true that the randomness will not make the AI stronger, but it will allow it to have "moves" in its arsenal that it wouldn't normally have and should make it harder to play against from a human's perspective.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
