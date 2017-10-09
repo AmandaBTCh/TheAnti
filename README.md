@@ -1,2 +1,2 @@
 # TheAnti
-An very simple Texas Hold'em AI.
+A very simple Texas Hold'em AI.
