@@ -1,0 +1,53 @@
+<?php
+
+namespace TheAnti\GameElement;
+
+/*
+ * The object that represents a player's hand.
+ */
+class Hand
+{
+	//@var Card[] The cards in the hand.
+	protected $cards = [];
+
+	/*
+	 * We accept an array of cards, or 2 cards
+	 */
+	public function __construct(array $cards)
+	{
+		if(count($cards) != 2)
+		{
+			throw new \Exception("Hands must have 2 cards!");
+		}
+
+		//Must all be Card objects
+		else
+		{
+			foreach($cards as $card)
+			{
+				if(!($card instanceof Card))
+				{
+					throw new \Exception("Hands must consist of Card objects!");
+				}
+			}
+		}
+
+		$this->cards = $cards;
+	}
+
+	/*
+	 * Gets the array of cards.
+	 */
+	public function getCards(): array
+	{
+		return $this->cards;
+	}
+
+	/*
+	 * Gets string representation of Hand.
+	 */
+	public function toString(): string
+	{
+		return $this->cards[0]->toString() . $this->cards[1]->toString();
+	}
+}

@@ -3,6 +3,7 @@
 namespace TheAnti\Player;
 
 use TheAnti\GameElement\Card;
+use TheAnti\GameElement\Hand;
 
 /*
  * The abstract base class for all players, both human and computer.
@@ -12,8 +13,8 @@ abstract class Player
 	//The stack of the player.
 	protected $stack = 0;
 
-	//@var Card[] The player's hand
-	protected $hand = [];
+	//@var Hand The player's hand.
+	protected $hand = NULL;
 
 	/*
 	 * Creates a player with a stack.
@@ -34,20 +35,17 @@ abstract class Player
 	/*
 	 * Sets the player's hand.
 	 */
-	public function setHand(array $hand)
+	public function setHand(Hand $hand)
 	{
-		$this->hand[0] = $hand[0];
-		$this->hand[1] = $hand[1];
+		$this->hand = $hand;
 	}
 
 	/*
-	 * Gets the player's hand as a string.
-	 * This program doesn't actually care about the cards, only their representation
-	 * to be used in API calls.
+	 * Gets the player's hand.
 	 */
-	public function getHand(): string
+	public function getHand(): Hand
 	{
-		return $this->hand[0]->toString() . $this->hand[1]->toString();
+		return $this->hand;
 	}
 
 	/*
