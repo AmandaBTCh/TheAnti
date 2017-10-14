@@ -22,24 +22,24 @@ class Card
 	public static function getRanks(): array
 	{
 		return [
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9',
-			'T',
-			'J',
-			'Q',
+			'A',
 			'K',
-			'A'
+			'Q',
+			'J',
+			'T',
+			'9',
+			'8',
+			'7',
+			'6',
+			'5',
+			'4',
+			'3',
+			'2',
 		];
 	}
 
 	public static function getSuits(): array
 	{
-		return ['s', 'd', 'c', 'h'];
+		return ['s', 'h', 'd', 'c'];
 	}
 }
