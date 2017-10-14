@@ -56,6 +56,23 @@ class Hand
 	}
 
 	/*
+	 * Determines if a hand has a card.
+	 * Used for finding invalid hands in ranges.
+	 */
+	public function hasCard(Card $card): bool
+	{
+		foreach($this->cards as $cardInHand)
+		{
+			if($card->toString() == $cardInHand->toString())
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/*
 	 * Gets string representation of Hand.
 	 */
 	public function toString(): string

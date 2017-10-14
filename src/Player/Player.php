@@ -2,8 +2,8 @@
 
 namespace TheAnti\Player;
 
-use TheAnti\GameElement\Card;
 use TheAnti\GameElement\Hand;
+use TheAnti\Range\Range;
 
 /*
  * The abstract base class for all players, both human and computer.
@@ -15,6 +15,9 @@ abstract class Player
 
 	//@var Hand The player's hand.
 	protected $hand = NULL;
+
+	//@var Range The player's range/perceived range.
+	protected $range = NULL;
 
 	/*
 	 * Creates a player with a stack.
@@ -46,6 +49,22 @@ abstract class Player
 	public function getHand(): Hand
 	{
 		return $this->hand;
+	}
+
+	/*
+	 * Gets the players range.
+	 */
+	public function getRange(): Range
+	{
+		return $this->range;
+	}
+
+	/*
+	 * Sets the player's range.
+	 */
+	public function setRange(Range $range)
+	{
+		$this->range = $range;
 	}
 
 	/*

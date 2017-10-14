@@ -112,4 +112,23 @@ abstract class Range
 			$this->removeWeightedHand($weightedHand);
 		}
 	}
+
+	/*
+	 * Removes hands with a specific card in them.
+	 * Used to remove impossible combos from our range.
+	 */
+	public function removeHandWeightsWithCards(array $cards)
+	{
+		foreach($cards as $card)
+		{
+			foreach($this->weightedHands as $weightedHand)
+			{
+				$hand = $weightedHand->getHand();
+				if($hand->hasCard($card))
+				{
+					$this->removeWeightedHand($weightedHand);
+				}
+			}
+		}
+	}
 }
