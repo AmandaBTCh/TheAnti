@@ -11,7 +11,7 @@ class Hand
 	protected $cards = [];
 
 	/*
-	 * We accept an array of cards, or 2 cards
+	 * We accept an array of 2 cards
 	 */
 	public function __construct(array $cards)
 	{
@@ -30,6 +30,18 @@ class Hand
 					throw new \Exception("Hands must consist of Card objects!");
 				}
 			}
+		}
+
+		/*
+		 * We need to order these in some way for simplicity
+		 * so that we treat AcKc and KcAc as the same hand.
+		 * "Bigger" card comes first.
+		 */
+		$card1 = $cards[0]->toString();
+		$card2 = $cards[1]->toString();
+		if($card1 < $card2)
+		{
+			$cards = array_reverse($cards);
 		}
 
 		$this->cards = $cards;

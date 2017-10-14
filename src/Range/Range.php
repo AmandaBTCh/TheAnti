@@ -24,24 +24,92 @@ use TheAnti\GameElement\Hand;
 abstract class Range
 {
 	//@var HandWeight[] Hands in our range with a weight.
-	protected $hands = [];
+	protected $weightedHands = [];
 
 	/*
-	 * Determines if a given hand is in our range.
+	 * Gets the weight of a specific hand within our range.
 	 * @return double Between 0 and 1 depending on how likely it is to be in
 	 * our range.
 	 */
-	abstract public function containsHand(Hand $hand): double;
-
-	/*
-	 * Get hands that might be in the range.
-	 */
-	public function getHands(): array
+	public function getHandWeight(Hand $hand): double
 	{
+		$handHash = $hand->toString();
 
+		if(isset($this->weightedHands[$handHash]))
+		{
+			return $this->weightedHands[$handHash]->getWeight();
+		}
+
+		else
+		{
+			return 0.0;
+		}
 	}
 
 	/*
-	 * Get weighted hands in range.
+	 * Gets weighted hands in our range.
+	 * TODO: Figure out whether or not we should auto-remove hands with a weight of 0.
 	 */
+	public function getWeightedHands(): array
+	{
+		return $this->weightedHands;
+	}
+
+	/*
+	 * Gets all hands that might be in our range.
+	 * @return Hand[]
+	 */
+	public function getHands(): array
+	{
+		$hands = [];
+		foreach($this->weightedHands as $weightedHand)
+		{
+			if($weightedHand->getWeight())
+			{
+				$hands[] = $weightedHand->getHand();
+			}
+		}
+		return $hands;
+	}
+
+	/*
+	 * Adds a hand weight to our range.
+	 * Will overwrite what's already in the range.
+	 */
+	protected function addWeightedHand(WeightedHand $weightedHand)
+	{
+		$handHash = $weightedHand->getHand()->toString();
+		$this->weightedHands[$handHash] = $weightedHand;
+	}
+
+	/*
+	 * Removes a hand from the range.
+	 */
+	protected function removeWeightedHand(WeightedHand $weightedHand)
+	{
+		$handHash = $weightedHand->getHand()->toString();
+		unset($this->weightedHands[$handHash]);
+	}
+
+	/*
+	 * Adds a number of hand weights to our range.
+	 */
+	public function addWeightedHands(array $weightedHands)
+	{
+		foreach($weightedHands as $weightedHand)
+		{
+			$this->addWeightedHand($weightedHand);
+		}
+	}
+
+	/*
+	 * Removes an array of hands from the range.
+	 */
+	public function removeWeightedHands(array $weightedHands)
+	{
+		foreach($weightedHands as $weightedHand)
+		{
+			$this->removeWeightedHand($weightedHand);
+		}
+	}
 }

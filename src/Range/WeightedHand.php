@@ -26,10 +26,7 @@ class WeightedHand
 	{
 		$this->hand = $hand;
 
-		if($this->weight < 0 || $this->weight > 1)
-		{
-			throw new \Exception("Invalid hand weight: weight must be between 0 and 1 inclusive!");
-		}
+		$this->setWeight($weight);
 	}
 
 	/*
@@ -46,5 +43,21 @@ class WeightedHand
 	public function getHand(): Hand
 	{
 		return $this->hand;
+	}
+
+	/*
+	 * Sets/adjusts the weight of the hand.
+	 */
+	public function setWeight(double $weight)
+	{
+		if($this->weight < 0 || $this->weight > 1)
+		{
+			throw new \Exception("Invalid hand weight: weight must be between 0 and 1 inclusive!");
+		}
+
+		else
+		{
+			$this->weight = $weight;
+		}
 	}
 }
