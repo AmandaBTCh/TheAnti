@@ -155,7 +155,7 @@ class HandStrengthCalculator
 			$len = count($this->handEquities);
 			$offset = array_search($handString, array_keys($this->handEquities));
 
-			return $offset / $len;
+			return round($offset / $len, 2);
 		}
 	}
 
@@ -164,7 +164,7 @@ class HandStrengthCalculator
 	 */
 	protected function rankHandStrength()
 	{
-		sort($this->handEquities);
+		asort($this->handEquities);
 	}
 
 	/*
