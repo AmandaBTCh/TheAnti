@@ -2,15 +2,11 @@
 
 require_once 'vendor/autoload.php';
 
-use TheAnti\Match\Settings as MatchSettings;
-use TheAnti\Match\Match;
+use TheAnti\HandStrength\HandStrengthCalculator;
 
-$matchSettings = new MatchSettings();
-$matchSettings->setBlinds(5, 2);
-$matchSettings->setStackSize(100);
+$handStrength = new HandStrengthCalculator([]);
+$handStrength->calculate();
 
-$match = new Match($matchSettings);
-
-print "All is well.";
+print "All is well.\n";
 
 ?>
