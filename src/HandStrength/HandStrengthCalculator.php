@@ -61,7 +61,7 @@ class HandStrengthCalculator
 		{
 			$rangeContents .= $hand->toString() . "\n";
 		}
-		file_put_contents($this->rangeFolder . "range_hands.txt", $rangeContents);
+		file_put_contents($this->rangeFolder . "\\range_hands.txt", chop($rangeContents));
 
 		//Build board string
 		$board = "";
@@ -70,7 +70,8 @@ class HandStrengthCalculator
 			$board .= $card->toString();
 		}
 
-		$url = "http://localhost/poker/TheAnti/tool/generate_equities.php?omp={$this->ompEval}&handFile={$this->rangeFolder}range_hands.txt&board={$board}";
+		$url = "http://localhost/poker/TheAnti/tool/generate_equities.php?omp={$this->ompEval}&handFile={$this->rangeFolder}\\range_hands.txt&board={$board}";
+
 		$equities = file_get_contents($url);
 
 		if($equities)

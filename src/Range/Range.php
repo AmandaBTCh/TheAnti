@@ -142,7 +142,8 @@ class Range
 
 		foreach($lines as $line)
 		{
-
+			$hand = Hand::importFromString($line);
+			$this->addWeightedHand(new WeightedHand($hand, 1.0));
 		}
 	}
 }

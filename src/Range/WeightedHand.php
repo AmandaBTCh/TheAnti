@@ -16,13 +16,13 @@ class WeightedHand
 	//@var Hand The hand.
 	protected $hand = NULL;
 
-	//@var double The weight indicating how likely it is we have this hand in our range.
+	//@var float The weight indicating how likely it is we have this hand in our range.
 	protected $weight = 0.0;
 
 	/*
 	 * Creates a weighted hand based on Hand and weight.
 	 */
-	public function __construct(Hand $hand, double $weight)
+	public function __construct(Hand $hand, float $weight)
 	{
 		$this->hand = $hand;
 
@@ -32,7 +32,7 @@ class WeightedHand
 	/*
 	 * Gets the weight.
 	 */
-	public function getWeight(): double
+	public function getWeight(): float
 	{
 		return $this->weight;
 	}
@@ -48,7 +48,7 @@ class WeightedHand
 	/*
 	 * Sets/adjusts the weight of the hand.
 	 */
-	public function setWeight(double $weight)
+	public function setWeight(float $weight)
 	{
 		if($this->weight < 0 || $this->weight > 1)
 		{

@@ -6,4 +6,5 @@ vendor
 
 #Generated Files
 tool/*.txt
-tool/equities
+tool/equities/*
+tool/ranges/*

@@ -57,6 +57,22 @@ class Card
 		return ($this->rank * 10) + $this->suit;
 	}
 
+	/*
+	 * Creates a card from a string representation.
+	 */
+	public function importFromString(string $card): Card
+	{
+		if(strlen($card) != 2)
+		{
+			throw new \Exception("$card is not a valid card!");
+		}
+
+		$rank = array_flip(Card::rankMap())[$card[0]];
+		$suit = array_flip(Card::suitMap())[$card[1]];
+
+		return new Card($rank, $suit);
+	}
+
 	public static function suitMap(): array
 	{
 		return [

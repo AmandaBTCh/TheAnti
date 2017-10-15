@@ -23,6 +23,8 @@ while($cards)
 	}
 }
 
+//Remove trailing new line
+$fileContents = chop($fileContents);
 file_put_contents("ranges/all_hands.txt", $fileContents);
 
 ?>

@@ -79,4 +79,29 @@ class Hand
 	{
 		return $this->cards[0]->toString() . $this->cards[1]->toString();
 	}
+
+	/*
+	 * Imports a hand from a string representation.
+	 */
+	public static function importFromString(string $hand): Hand
+	{
+		if(strlen($hand) != 4)
+		{
+			throw new \Exception("$hand is not a valid hand!");
+		}
+
+		//Get card strings
+		$cardStrings = [
+			substr($hand, 0, 2),
+			substr($hand, 2, 2)
+		];
+
+		$cards = [];
+		foreach($cardStrings as $cardString)
+		{
+			$cards[] = Card::importFromString($cardString);
+		}
+
+		return new Hand($cards);
+	}
 }

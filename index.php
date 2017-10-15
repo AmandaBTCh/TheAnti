@@ -6,7 +6,7 @@ use TheAnti\Range\Range;
 use TheAnti\HandStrength\HandStrengthCalculator;
 
 $range = new Range();
-$range->importHands("all_hands.txt");
+$range->importHands("tool/ranges/all_hands.txt");
 $handStrength = new HandStrengthCalculator([], $range);
 $handStrength->calculate();
 
