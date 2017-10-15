@@ -3,6 +3,7 @@
 require_once '../vendor/autoload.php';
 
 use TheAnti\GameElement\Deck;
+use TheAnti\GameElement\Hand;
 
 /*
  * Script which generates all possible starting hand combos and saves them to a file.
@@ -18,10 +19,10 @@ while($cards)
 	$baseCard = array_shift($cards);
 	foreach($cards as $card)
 	{
-		$fileContents .= $baseCard->toString() . $card->toString() . "\n";
+		$fileContents .= (new Hand([$card, $baseCard]))->toString() . "\n";
 	}
 }
 
-file_put_contents("all_hands.txt", $fileContents);
+file_put_contents("ranges/all_hands.txt", $fileContents);
 
 ?>

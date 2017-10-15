@@ -37,8 +37,8 @@ class Hand
 		 * so that we treat AcKc and KcAc as the same hand.
 		 * "Bigger" card comes first.
 		 */
-		$card1 = $cards[0]->toString();
-		$card2 = $cards[1]->toString();
+		$card1 = $cards[0]->getHash();
+		$card2 = $cards[1]->getHash();
 		if($card1 < $card2)
 		{
 			$cards = array_reverse($cards);

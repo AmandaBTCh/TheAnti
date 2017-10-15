@@ -11,7 +11,29 @@ $omp = $_GET["omp"];
 $handFile = $_GET["handFile"];
 $board = $_GET["board"] ?? "";
 
-$command = "{$omp} {$handFile} {$board}";
-system($command);
+//If we weren't given a board, return the preflop equity file
+if($board == "" && file_exists("equities/pre.txt"))
+{
+	print file_get_contents("equities/pre.txt");
+}
+
+else
+{
+	$command = "{$omp} {$handFile} {$board}";
+
+	ob_start();
+	system($command);
+	$results = ob_get_clean();
+
+	//Cache preflop equities
+	if($board == "")
+	{
+		file_put_contents("equities/pre.txt", $results);
+	}
+
+	print $results;
+}
+
+exit;
 
 ?>

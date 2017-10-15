@@ -21,7 +21,7 @@ use TheAnti\GameElement\Hand;
  * The static ranges will simply specify whether we have the hand or not.
  * This is the type that I will implement for the first version of TheAnti.
  */
-abstract class Range
+class Range
 {
 	//@var HandWeight[] Hands in our range with a weight.
 	protected $weightedHands = [];
@@ -129,6 +129,20 @@ abstract class Range
 					$this->removeWeightedHand($weightedHand);
 				}
 			}
+		}
+	}
+
+	/*
+	 * Imports hands from file to range.
+	 */
+	public function importHands(string $file)
+	{
+		$contents = file_get_contents($file);
+		$lines = explode("\n", $contents);
+
+		foreach($lines as $line)
+		{
+
 		}
 	}
 }

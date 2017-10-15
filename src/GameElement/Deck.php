@@ -22,9 +22,9 @@ class Deck
 	{
 		$this->cards = [];
 
-		foreach(Card::getRanks() as $rank)
+		foreach(array_keys(Card::rankMap()) as $rank)
 		{
-			foreach(Card::getSuits() as $suit)
+			foreach(array_keys(Card::suitMap()) as $suit)
 			{
 				$this->cards[] = new Card($rank, $suit);
 			}
