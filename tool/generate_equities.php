@@ -25,6 +25,8 @@ else
 	system($command);
 	$results = ob_get_clean();
 
+	$results = chop($results);
+
 	//Cache preflop equities
 	if($board == "")
 	{
