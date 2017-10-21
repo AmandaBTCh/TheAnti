@@ -49,7 +49,7 @@ class BoardAnalyzer
 	/*
 	 * Gets info about paired boards based on board texture.
 */
-	public function getPairedInfo(): Flush
+	public function getPairedInfo(): Paired
 	{
 		return new Paired($this->board);
 	}
