@@ -3,30 +3,19 @@
 require_once 'vendor/autoload.php';
 
 use TheAnti\Range\Range;
-use TheAnti\HandStrength\HandStrengthCalculator;
-use TheAnti\GameElement\Hand;
-use TheAnti\GameElement\Card;
+use TheAnti\HandAnalysis\HandAnalyzer;
 
 $range = new Range();
 $range->importHands("tool/ranges/all_hands.txt");
 
-$range->removeHandWeightsWithCards([
-
-]);
-
-$handStrength = new HandStrengthCalculator([
-
-], $range);
-$handStrength->calculate();
-
-$rangeStrength = $handStrength->getRangeStrength();
-foreach($rangeStrength as $handString => $equity)
+$suited = 0;
+foreach($range->getHands() as $hand)
 {
-	$hand = Hand::importFromString($handString);
-	$strength = $handStrength->getHandStrength($hand);
-
-	print "{$handString}: {$strength}\n";
+	$ha = new HandAnalyzer($hand);
+	$suited += (int) $ha->isSuited();
 }
+
+print "$suited suited hand combos.\n";
 
 print "All is well.\n";
 

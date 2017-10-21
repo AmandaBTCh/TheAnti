@@ -17,5 +17,35 @@ use TheAnti\GameElement\Card;
  */
 class HandAnalyzer
 {
+	//@var Hand The hand to analyze
 	protected $hand = NULL;
+
+	/*
+	 * Cached values for performance.
+	 */
+
+	//@var boolean Suited/unsuited
+	protected $suited = NULL;
+
+	/*
+	 * Creates a new hand analyzer based on a hand.
+	 */
+	public function __construct(Hand $hand)
+	{
+		$this->hand = $hand;
+	}
+
+	/*
+	 * Determines whether the hand is suited.
+	 */
+	public function isSuited(): bool
+	{
+		if($this->suited === NULL)
+		{
+			$cards = $this->hand->getCards();
+			$this->suited = ($cards[0]->getSuit() == $cards[1]->getSuit());
+		}
+
+		return $this->suited;
+	}
 }

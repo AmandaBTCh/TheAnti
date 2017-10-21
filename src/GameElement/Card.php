@@ -27,6 +27,9 @@ class Card
 	protected $rank;
 	protected $suit;
 
+	/*
+	 * Creates a new card based on rank and suit.
+	 */
 	public function __construct(int $rank, int $suit)
 	{
 		if(!isset(self::rankMap()[$rank]))
@@ -43,6 +46,9 @@ class Card
 		$this->suit = $suit;
 	}
 
+	/*
+	 * Converts the card to a string representation.
+	 */
 	public function toString(): string
 	{
 		return self::rankMap()[$this->rank] . self::suitMap()[$this->suit];
@@ -71,6 +77,22 @@ class Card
 		$suit = array_flip(Card::suitMap())[$card[1]];
 
 		return new Card($rank, $suit);
+	}
+
+	/*
+	 * Gets the suit.
+	 */
+	public function getSuit(): int
+	{
+		return $this->suit;
+	}
+
+	/*
+	 * Gets the rank.
+	 */
+	public function getRank(): int
+	{
+		return $this->rank;
 	}
 
 	public static function suitMap(): array
