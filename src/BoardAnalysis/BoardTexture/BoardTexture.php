@@ -20,4 +20,28 @@ class BoardTexture
 	{
 		$this->board = $board;
 	}
+
+	/*
+	 * Determines if this is on the flop.
+	 */
+	public function isFlop(): bool
+	{
+		return count($this->board) == 3;
+	}
+
+	/*
+	 * Determines if this is on the turn.
+	 */
+	public function isTurn(): bool
+	{
+		return count($this->board) == 4;
+	}
+
+	/*
+	 * Determines if this is on the flop.
+	 */
+	public function isRiver(): bool
+	{
+		return count($this->board) == 5;
+	}
 }
