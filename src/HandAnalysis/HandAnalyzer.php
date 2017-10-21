@@ -163,7 +163,53 @@ class HandAnalyzer
 	{
 		if($this->flopConnectivity === NULL)
 		{
+			$diff = $this->getDiffConnectivity();
 
+			//More than 4 apart, means no straights!
+			if($diff > 4)
+			{
+				$this->flopConnectivity = 0;
+			}
+
+			//0 apart, means a pair
+			else if ($diff == 0)
+			{
+				$this->flopConnectivity = 0;
+			}
+
+			//At least one straight
+			else
+			{
+				$cards = $this->hand->getCards();
+				$rank1 = $cards[0]->getRank();
+				$rank2 = $cards[1]->getRank();
+
+				$highRank = max($rank1, $rank2);
+				$lowRank = min($rank1, $rank2);
+
+				/*
+				 * If the high card is an A and the low card
+				 * is a 5 or lower, the low card becomes a 1 and the
+				 * high card becomes the low card
+				 */
+				if($highRank == Card::ACE && $lowRank <= Card::FIVE)
+				{
+					$highRank = $lowRank;
+					$lowRank = 1;
+				}
+
+				//The upper end and lower ends of where we can make straights
+				$straightUpper = $lowRank + 4;
+				$straightLower = $highRank - 4;
+
+				//Verify these are valid cards
+				$straightUpper = min($straightUpper, Card::ACE);
+				$straightLower = max($straightLower, 1);
+
+				//Calculate total number of possible flopped straights
+				$straights = ($straightUpper - $straightLower) - 3;
+				$this->flopConnectivity = $straights;
+			}
 		}
 
 		return $this->flopConnectivity;
