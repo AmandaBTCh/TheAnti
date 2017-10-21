@@ -41,14 +41,20 @@ class HandAnalyzer
 	 * Cached values for performance.
 	 */
 
-	//@var bool Suited/unsuited
+	//@var bool Suited/unsuited.
 	protected $suited = NULL;
 
-	//@var bool Paired/unpaired
+	//@var bool Paired/unpaired.
 	protected $paired = NULL;
 
-	//@var int Height of hand
+	//@var int Height of hand.
 	protected $height = NULL;
+
+	//@var int The difference between the two card ranks.
+	protected $diffConnectivity = NULL;
+
+	//@var int The number of straights this hand can flop.
+	protected $flopConnectivity = NULL;
 
 	/*
 	 * Creates a new hand analyzer based on a hand.
@@ -122,5 +128,44 @@ class HandAnalyzer
 		return $this->height;
 	}
 
+	/*
+	 * Gets connectivity for the hand using the card difference.
+	 */
+	public function getDiffConnectivity(): int
+	{
+		if($this->diffConnectivity === NULL)
+		{
+			$cards = $this->hand->getCards();
+			$rank1 = $cards[0]->getRank();
+			$rank2 = $cards[1]->getRank();
 
+			//Aces are special as they can either be 14 or 1
+			if($rank1 == Card::ACE && ($rank1 - $rank2) > 6)
+			{
+				$rank1 = 1;
+			}
+
+			else if($rank2 == Card::ACE && ($rank2 - $rank1) > 6)
+			{
+				$rank2 = 1;
+			}
+
+			$this->diffConnectivity = abs($rank1 - $rank2);
+		}
+
+		return $this->diffConnectivity;
+	}
+
+	/*
+	 * Gets connectivity for the hand returning the number of floppable straights.
+	 */
+	public function getFlopConnectivity(): int
+	{
+		if($this->flopConnectivity === NULL)
+		{
+
+		}
+
+		return $this->flopConnectivity;
+	}
 }
