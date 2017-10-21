@@ -11,7 +11,7 @@ use TheAnti\GameElement\Card;
  * 1. Suited: Suited, Unsuited
  * 2. Paired: Paired, Unpaired
  * 3. Connected:
- * 		A. Number of straights we can flop (max = 49T, min = 0)
+ * 		A. Number of straights we can flop (max = 4, min = 0)
  * 		B. Distance between cards (max = 6, min = 0)
  * 4. High: Rank of highest card using one of the following constants:
  * 		A. HIGH:		A-Q
