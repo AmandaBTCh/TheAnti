@@ -56,7 +56,8 @@ class Flush extends BoardTexture
 			$draws = 0;
 			foreach($this->suits as $num)
 			{
-				if($num == 2)
+				//2 and 3 to a flush means someone could have a draw
+				if($num == 2 || $num == 3)
 				{
 					$draws++;
 				}

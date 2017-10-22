@@ -45,25 +45,24 @@ class Straight extends BoardTexture
 	}
 
 	/*
-	 * Gets the number of uniquely ranked hand combos
-	 * which can make straights on this board.
+	 * Gets the number of uniquely ranked straights on a board.
 	 */
 	public function getStraights(): int
 	{
 		//No straights are possible unless we have 3 cards
-		if(count($this->board) < 3)
+		if(count($this->ranks) < 3)
 		{
 			return 0;
 		}
 
 		//Build a list of the 3 card combos in order
 		$threeCombos = [];
-		for($i=0; $i<count($this->board) - 2; $i++)
+		for($i=0; $i<count($this->ranks) - 2; $i++)
 		{
 			$cards = [];
 			for($j=0; $j<3; $j++)
 			{
-				$cards[] = $this->board[$i + $j];
+				$cards[] = $this->ranks[$i + $j];
 			}
 			$threeCombos[] = $cards;
 		}
@@ -116,6 +115,7 @@ class Straight extends BoardTexture
 
 		$numStraights = ($straightMax - $straightMin) - 3;
 
+		//Loop through the 5-card straights and add them to the return array
 		$madeStraights = [];
 		for($i=0; $i<$numStraights; $i++)
 		{

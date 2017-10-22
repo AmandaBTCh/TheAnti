@@ -66,7 +66,7 @@ class Card
 	/*
 	 * Creates a card from a string representation.
 	 */
-	public function importFromString(string $card): Card
+	public static function importFromString(string $card): Card
 	{
 		if(strlen($card) != 2)
 		{
