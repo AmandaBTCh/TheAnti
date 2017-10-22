@@ -5,6 +5,7 @@ chdir("../");
 require_once 'vendor/autoload.php';
 
 use TheAnti\BoardAnalysis\BoardAnalyzer;
+use TheAnti\BoardAnalysis\BoardTexture\Paired;
 use TheAnti\GameElement\Card;
 
 print "Testing board analysis on several different board textures...\n";
@@ -43,6 +44,11 @@ foreach($boards as $board)
 	$straightInfo = $ba->getStraightInfo();
 	print "Straight Info:\n====================\n";
 	print "Possible straights: " . $straightInfo->getStraights() . "\n\n";
+
+	//Get pairing info
+	$pairInfo = $ba->getPairedInfo();
+	print "Paired Info:\n====================\n";
+	print "Paired type: " . $pairInfo->getPairingTypeDesc() . "\n\n";
 }
 
 print "All is well.\n";

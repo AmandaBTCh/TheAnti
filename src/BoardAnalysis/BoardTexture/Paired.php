@@ -18,6 +18,16 @@ class Paired extends BoardTexture
 	const QUADS = 4;
 	const BOAT = 5;
 
+	//Descriptions for constants (for testing)
+	const DESCRIPTIONS = [
+		self::UNPAIRED			=> "Unpaired",
+		self::PAIRED			=> "Paired",
+		self::TRIPS				=> "Trips",
+		self::DOUBLE_PAIRED		=> "Double paired",
+		self::QUADS				=> "Quads",
+		self::BOAT				=> "Boat"
+	];
+
 	//@var array Analysis of board pairings.
 	protected $pairings = [];
 
@@ -54,7 +64,7 @@ class Paired extends BoardTexture
 	 */
 	public function isPaired(): bool
 	{
-		//This works because self::UNPAIRED  is 0
+		//This works because self::UNPAIRED is 0
 		return (bool) $this->getPairingType();
 	}
 
@@ -128,5 +138,15 @@ class Paired extends BoardTexture
 		{
 			return self::UNPAIRED;
 		}
+	}
+
+	/*
+	 * Gets the pair type description.
+	 * For testing and possibly the GUI.
+	 */
+	public function getPairingTypeDesc(): string
+	{
+		$pType = $this->getPairingType();
+		return self::DESCRIPTIONS[$pType];
 	}
 }
