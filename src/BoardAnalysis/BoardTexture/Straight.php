@@ -3,6 +3,7 @@
 
 namespace TheAnti\BoardAnalysis\BoardTexture;
 use TheAnti\GameElement\Card;
+use TheAnti\GameElement\Board;
 
 /*
  * Gets information about the total number of
@@ -15,7 +16,7 @@ class Straight extends BoardTexture
 	//@var array Stores an ordered list of unique ranks
 	protected $ranks = [];
 
-	public function __construct(array $board)
+	public function __construct(Board $board)
 	{
 		parent::__construct($board);
 		$this->analyzeStraights();
@@ -28,7 +29,7 @@ class Straight extends BoardTexture
 	public function analyzeStraights()
 	{
 		//Builds the ordered array of unique ranks
-		foreach($this->board as $card)
+		foreach($this->board->getCards() as $card)
 		{
 			$rank = $card->getRank();
 			$this->ranks[$rank] = true;

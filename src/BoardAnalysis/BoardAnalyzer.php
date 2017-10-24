@@ -2,6 +2,7 @@
 
 namespace TheAnti\BoardAnalysis;
 
+use TheAnti\GameElement\Board;
 use TheAnti\BoardAnalysis\BoardTexture\Flush;
 use TheAnti\BoardAnalysis\BoardTexture\Straight;
 use TheAnti\BoardAnalysis\BoardTexture\Paired;
@@ -17,15 +18,13 @@ use TheAnti\BoardAnalysis\BoardTexture\Paired;
  */
 class BoardAnalyzer
 {
-	//@var Card[] The board.
-	protected $board = [];
+	//@var Board The board.
+	protected $board = NULL;
 
 	/*
-	 * Constructor gets a board.
-	 * NOTE: We should create a Board object which does the validation.
-	 * Who knows what this array might be!
+	 * Creates a new board analyzer with a board.
 	 */
-	public function __construct(array $board)
+	public function __construct(Board $board)
 	{
 		$this->board = $board;
 	}

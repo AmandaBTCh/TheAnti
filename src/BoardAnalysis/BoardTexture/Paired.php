@@ -2,6 +2,8 @@
 
 namespace TheAnti\BoardAnalysis\BoardTexture;
 
+use TheAnti\GameElement\Board;
+
 /*
  * Gets info about the different pairings on the board.
  * 1. Tells whether the board is paired or not.
@@ -31,7 +33,7 @@ class Paired extends BoardTexture
 	//@var array Analysis of board pairings.
 	protected $pairings = [];
 
-	public function __construct(array $board)
+	public function __construct(Board $board)
 	{
 		parent::__construct($board);
 		$this->analyzePairs();
@@ -42,7 +44,7 @@ class Paired extends BoardTexture
 	 */
 	public function analyzePairs()
 	{
-		foreach($this->board as $card)
+		foreach($this->board->getCards() as $card)
 		{
 			$rank = $card->getRank();
 			if(!isset($this->pairings[$rank]))

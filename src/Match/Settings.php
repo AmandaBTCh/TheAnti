@@ -83,4 +83,12 @@ class Settings
 	{
 		$this->bankroll = max($br, $this->getStartingStackSize());
 	}
+
+	/*
+	 * Gets the bankroll of each player.
+	 */
+	public function getBankroll(): int
+	{
+		return $this->bankroll;
+	}
 }

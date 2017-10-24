@@ -3,6 +3,7 @@
 namespace TheAnti\HandStrength;
 
 use TheAnti\GameElement\Card;
+use TheAnti\GameElement\Board;
 use TheAnti\GameElement\Hand;
 use TheAnti\Range\Range;
 
@@ -18,8 +19,8 @@ class HandStrengthCalculator
 	//@var string The name of the executable to calculate hand equities.
 	protected $ompEval = "OMPEval.exe";
 
-	//@var Card[] The board.
-	protected $board = [];
+	//@var Board The board.
+	protected $board = NULL;
 
 	//@var Range The range to calculate strength for.
 	protected $range = NULL;
@@ -34,30 +35,11 @@ class HandStrengthCalculator
 	 * Creates a new hand strength calculator based on an optional board.
 	 * Accepts an array of Card objects.
 	 */
-	public function __construct(array $board = [], Range $range)
+	public function __construct(Board $board, Range $range)
 	{
 		$this->setRange($range);
 
-		foreach($board as $card)
-		{
-			$this->addCardToBoard($card);
-		}
-	}
-
-	/*
-	 * Adds a card to the board and invalidates the calculated equities.
-	 * Destroys the array of calculated equities.
-	 */
-	public function addCardToBoard(Card $card)
-	{
-		$this->board[] = $card;
-
-		if(count($this->board) > 5)
-		{
-			throw new \Exception("The board can only have up to 5 cards!");
-		}
-
-		$this->clearCalculation();
+		$this->board = $board;
 	}
 
 	/*
@@ -87,7 +69,7 @@ class HandStrengthCalculator
 
 		//Build board string
 		$board = "";
-		foreach($this->board as $card)
+		foreach($this->board->getCards() as $card)
 		{
 			$board .= $card->toString();
 		}

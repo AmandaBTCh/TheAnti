@@ -3,6 +3,7 @@
 namespace TheAnti\BoardAnalysis\BoardTexture;
 
 use TheAnti\GameElement\Card;
+use TheAnti\GameElement\Board;
 
 /*
  * Gets information relating to flushes on a specific board.
@@ -21,7 +22,7 @@ class Flush extends BoardTexture
 		Card::HEARTS	=> 0
 	];
 
-	public function __construct(array $board)
+	public function __construct(Board $board)
 	{
 		parent::__construct($board);
 		$this->analyzeSuits();
@@ -34,7 +35,7 @@ class Flush extends BoardTexture
 	 */
 	protected function analyzeSuits()
 	{
-		foreach($this->board as $card)
+		foreach($this->board->getCards() as $card)
 		{
 			$this->suits[$card->getSuit()]++;
 		}

@@ -1,6 +1,9 @@
 <?php
 
 namespace TheAnti\BoardAnalysis\BoardTexture;
+
+use TheAnti\GameElement\Board;
+
 /*
  * Base class for BoardTexture objects to provide some
  * basic functionality.
@@ -10,13 +13,13 @@ namespace TheAnti\BoardAnalysis\BoardTexture;
  */
 class BoardTexture
 {
-	//@var Card[] The board.
-	protected $board = [];
+	//@var Board The board.
+	protected $board = NULL;
 
 	/*
 	 * Sets the board for the board texture child to work with.
 	 */
-	public function __construct(array $board)
+	public function __construct(Board $board)
 	{
 		$this->board = $board;
 	}
@@ -26,7 +29,7 @@ class BoardTexture
 	 */
 	public function isFlop(): bool
 	{
-		return count($this->board) == 3;
+		return count($this->board->getCards()) == 3;
 	}
 
 	/*
@@ -34,7 +37,7 @@ class BoardTexture
 	 */
 	public function isTurn(): bool
 	{
-		return count($this->board) == 4;
+		return count($this->board->getCards()) == 4;
 	}
 
 	/*
@@ -42,6 +45,6 @@ class BoardTexture
 	 */
 	public function isRiver(): bool
 	{
-		return count($this->board) == 5;
+		return count($this->board->getCards()) == 5;
 	}
 }

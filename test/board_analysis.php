@@ -7,6 +7,7 @@ require_once 'vendor/autoload.php';
 use TheAnti\BoardAnalysis\BoardAnalyzer;
 use TheAnti\BoardAnalysis\BoardTexture\Paired;
 use TheAnti\GameElement\Card;
+use TheAnti\GameElement\Board;
 
 print "Testing board analysis on several different board textures...\n";
 
@@ -27,7 +28,7 @@ foreach($boards as $board)
 		$cards[] = Card::importFromString($cardString);
 	}
 
-	$ba = new BoardAnalyzer($cards);
+	$ba = new BoardAnalyzer(new Board($cards));
 
 	//Print out board
 	print "Board:\n";

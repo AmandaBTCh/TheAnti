@@ -28,8 +28,8 @@ class Match
 
 	public function setupPlayers()
 	{
-		$this->players[0] = new Human($this->settings->getStartingStackSize());
-		$this->players[1] = new TheAnti($this->settings->getStartingStackSize());
+		$this->players[0] = new Human($this->settings->getStartingStackSize(), $this->settings->getBankroll());
+		$this->players[1] = new TheAnti($this->settings->getStartingStackSize(), $this->settings->getBankroll());
 	}
 }
 
