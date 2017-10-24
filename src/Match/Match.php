@@ -10,7 +10,7 @@ use TheAnti\Player\TheAnti;
  */
 class Match
 {
-	//@var TheAnti\Player\Player[] The poker players 0 => human, 1 => computer
+	//@var Player[] The poker players 0 => human, 1 => computer
 	protected $players = [];
 
 	//@var Settings The settings for the match

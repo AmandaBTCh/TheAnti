@@ -10,7 +10,10 @@ use TheAnti\Range\Range;
  */
 abstract class Player
 {
-	//The stack of the player.
+	//@var int The player's bankroll.
+	protected $bankroll = 0;
+
+	//@var int The stack of the player.
 	protected $stack = 0;
 
 	//@var Hand The player's hand.
@@ -22,7 +25,16 @@ abstract class Player
 	/*
 	 * Creates a player with a stack.
 	 */
-	public function __construct(int $stack)
+	public function __construct(int $stack, int $bankroll = 0)
+	{
+		$this->setStack($stack);
+		$this->setBankroll($bankroll);
+	}
+
+	/*
+	 * Sets the players stack size.
+	 */
+	public function setStack(int $stack)
 	{
 		$this->stack = $stack;
 	}
@@ -33,6 +45,24 @@ abstract class Player
 	public function getStack(): int
 	{
 		return $this->stack;
+	}
+
+	/*
+	 * Sets the player's bankroll.
+	 */
+	public function setBankroll(int $br = 0)
+	{
+		//Default the bankroll to 10 times the stack size
+		$bankroll = $br ?: $this->stack * 10;
+		$this->bankroll = $bankroll;
+	}
+
+	/*
+	 * Gets the player's bankroll.
+	 */
+	public function getBankroll(): int
+	{
+		return $this->bankroll;
 	}
 
 	/*

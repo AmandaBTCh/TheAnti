@@ -8,25 +8,37 @@ namespace TheAnti\Match;
  */
 class Settings
 {
-	//Stack sizes for the match in BB.
+	//@var int Bankroll of players
+	protected $bankroll = 10000;
+
+	//@var int Stack sizes for the match in BB.
 	protected $stackSize = 200;
 
-	//The big blind
+	//@var int The big blind
 	protected $bb = 2;
 
-	//If small blind
+	//@var int The small blind
 	protected $sb = 1;
 
+	/*
+	 * Gets the stack sizes for the match in BB.
+	 */
 	public function getStackSize(): int
 	{
 		return $this->stackSize;
 	}
 
+	/*
+	 * Gets the starting stack size.
+	 */
 	public function getStartingStackSize(): int
 	{
 		return $this->bb * $this->stackSize;
 	}
 
+	/*
+	 * Gets an array of blinds.
+	 */
 	public function getBlinds()
 	{
 		return [$this->bb, $this->sb];
@@ -61,5 +73,14 @@ class Settings
 		{
 			$this->sb = floor($this->bb / 2);
 		}
+	}
+
+	/*
+	 * Sets the bankroll of each player.
+	 * Must be at least the size of the starting stack.
+	 */
+	public function setBankroll(int $br)
+	{
+		$this->bankroll = max($br, $this->getStartingStackSize());
 	}
 }
