@@ -4,6 +4,7 @@ namespace TheAnti\Match;
 
 use TheAnti\Player\Human;
 use TheAnti\Player\TheAnti;
+use TheAnti\Tool\Prompt;
 
 /*
  * The class that represents a match between a human and computer player.
@@ -26,7 +27,26 @@ class Match
 		$this->setupPlayers();
 	}
 
-	public function setupPlayers()
+	/*
+	 * Starts the match!
+	 * Keeps on playing rounds
+	 * until there is either no money left
+	 * or the human decides to quit.
+	 */
+	public function start()
+	{
+		$prompt = new Prompt();
+		while($prompt->getYesNo("Would you like to start a new round? (y/n): "))
+		{
+			$round = new Round($this);
+			$round->start();
+		}
+	}
+
+	/*
+	 * Sets up players.
+	 */
+	protected function setupPlayers()
 	{
 		$this->players[0] = new Human($this->settings->getStartingStackSize(), $this->settings->getBankroll());
 		$this->players[1] = new TheAnti($this->settings->getStartingStackSize(), $this->settings->getBankroll());
