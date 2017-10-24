@@ -83,8 +83,19 @@ class HandStrengthCalculator
 			$lines = explode("\n", $equities);
 			foreach($lines as $line)
 			{
-				$handEq = explode(": ", $line);
-				$this->handEquities[$handEq[0]] = (float) $handEq[1];
+				//Get the data from the evaluator
+				$handEquities = explode(",", $line);
+				$handString = $handEquities[0];
+				$handWins = $handEquities[1];
+				$handTies = $handEquities[2];
+				$handTotal = $handEquities[3];
+
+				//Create the object to represent the hand's strength
+				$hand = Hand::importFromString($handString);
+				$handStrength = new HandStrength($hand, $handWins, $handTies, $handTotal);
+
+				//Map the hand strength to the percentage it wins
+				$this->handEquities[$handString] = $handStrength;
 			}
 
 			$this->rankHandStrength();
@@ -123,6 +134,8 @@ class HandStrengthCalculator
 	 * how strong our hand is.
 	 * A negative indicates that the hand was not in our range.
 	 * Should this be an exception?
+	 * This method could use to be improved significantly.
+	 * It should almost be its own class.
 	 */
 	public function getHandStrength(Hand $hand): float
 	{
@@ -134,19 +147,31 @@ class HandStrengthCalculator
 
 		else
 		{
-			$len = count($this->handEquities);
-			$offset = array_search($handString, array_keys($this->handEquities));
+			//If we can't lose, this needs to be considered the nuts
+			$handStrength = $this->handEquities[$handString];
+			if($handStrength->getLoss() == 0.0)
+			{
+				return 1;
+			}
 
-			return round($offset / $len, 2);
+			//Regular algorithm
+			else
+			{
+				$len = count($this->handEquities);
+				$offset = array_search($handString, array_keys($this->handEquities));
+				return round($offset / $len, 2);
+			}
 		}
 	}
 
 	/*
-	 * Orders the array from low to high in hand strength based on equity.
+	 * Orders the array from low to high in hand strength based on win percentages.
 	 */
 	protected function rankHandStrength()
 	{
-		asort($this->handEquities);
+		uasort($this->handEquities, function(HandStrength $a, HandStrength $b){
+			return $a->getWin() <=> $b->getWin();
+		});
 	}
 
 	/*
