@@ -31,9 +31,21 @@ class Deck
 		}
 	}
 
+	/*
+	 * Shuffles the deck.
+	 */
 	public function shuffle()
 	{
-		shuffle($this->cards);
+		$cardsLen = count($this->cards);
+		for($i=0; $i<$cardsLen; $i++)
+		{
+			$rand = mt_rand(0, $cardsLen - 1);
+			$original = $this->cards[$i];
+
+			//Swap the cards
+			$this->cards[$i] = $this->cards[$rand];
+			$this->cards[$rand] = $original;
+		}
 	}
 
 	/*

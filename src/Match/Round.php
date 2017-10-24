@@ -3,6 +3,8 @@
 namespace TheAnti\Match;
 
 use TheAnti\GameElement\Board;
+use TheAnti\GameElement\Deck;
+use TheAnti\GameElement\Hand;
 use TheAnti\Player\Player;
 
 /*
@@ -32,6 +34,8 @@ class Round
 	//@var int The pot.
 	protected $pot = 0;
 
+	//@var Deck The deck for this round.
+
 	/*
 	 * Creates a new round.
 	 */
@@ -39,6 +43,7 @@ class Round
 	{
 		$this->match = $match;
 		$this->board = new Board();
+		$this->deck = new Deck();
 	}
 
 	/*
@@ -46,11 +51,18 @@ class Round
 	 */
 	public function start()
 	{
-		print "\n\n";
+		print "\n";
 
 		print "Starting round...\n";
 
+		//Shuffle the deck
+		$this->deck->shuffle();
+
+		//Post the blinds
 		$this->postBlinds();
+
+		//Deal cards
+		$this->dealCards();
 
 		//Update player positions
 		$this->match->moveButton();
@@ -62,6 +74,8 @@ class Round
 
 	protected function postBlinds()
 	{
+		print "\n";
+
 		//Get blinds
 		$settings = $this->match->getSettings();
 		$blinds = $settings->getBlinds();
@@ -84,6 +98,26 @@ class Round
 
 		//Update status
 		print "Pot is now \${$this->pot}.\n";
+
+		print "\n";
+	}
+
+	/*
+	 * Deals the cards.
+	 */
+	protected function dealCards()
+	{
+		//Get the hands
+		$hands = [
+			new Hand($this->deck->getCards(2)),
+			new Hand($this->deck->getCards(2))
+		];
+
+		foreach($hands as $key => $hand)
+		{
+			$this->match->getPlayers()[$key]->broadcast("Gets dealt hand " . $hand->toString() . ".");
+			$this->match->getPlayers()[$key]->setHand($hand);
+		}
 	}
 
 	/*
