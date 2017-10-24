@@ -28,6 +28,14 @@ class Match
 	}
 
 	/*
+	 * Gets the settings.
+	 */
+	public function getSettings(): Settings
+	{
+		return $this->settings;
+	}
+
+	/*
 	 * Starts the match!
 	 * Keeps on playing rounds
 	 * until there is either no money left
@@ -50,6 +58,23 @@ class Match
 	{
 		$this->players[0] = new Human($this->settings->getStartingStackSize(), $this->settings->getBankroll());
 		$this->players[1] = new TheAnti($this->settings->getStartingStackSize(), $this->settings->getBankroll());
+	}
+
+	/*
+	 * Gets the array of players.
+	 */
+	public function getPlayers(): array
+	{
+		return $this->players;
+	}
+
+	/*
+	 * Moves the button.
+	 * (Updates player position)
+	 */
+	public function moveButton()
+	{
+		$this->players = array_reverse($this->players);
 	}
 }
 

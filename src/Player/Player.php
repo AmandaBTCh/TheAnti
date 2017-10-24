@@ -98,6 +98,15 @@ abstract class Player
 	}
 
 	/*
+	 * Broadcasts a message to/from this player.
+	 */
+	public function broadcast(string $message)
+	{
+		$reflection = new \ReflectionClass($this);
+		print $reflection->getShortName() . ": $message\n";
+	}
+
+	/*
 	 * Applies a decision to the player which will
 	 * affect the game/player's decision history and
 	 * also possibly the player's stack.
