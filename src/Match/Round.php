@@ -64,6 +64,9 @@ class Round
 		//Deal cards
 		$this->dealCards();
 
+		//Get player action!
+		//...
+
 		//Update player positions
 		$this->match->moveButton();
 
