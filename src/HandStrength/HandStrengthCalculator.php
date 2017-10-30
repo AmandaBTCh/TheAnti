@@ -118,6 +118,28 @@ class HandStrengthCalculator
 	}
 
 	/*
+	 * Gets all hands within a certain strength percentage within our range.
+	 * For example, if we want to get the top 15% of hands within our range,
+	 * we would specify:
+	 * min = 0.85, max = 1.0
+	 * @return Hand[]
+	 */
+	public function getHandsByStrength(float $min = 0.0, float $max = 1.0): array
+	{
+		//This is really slow, but simple
+		$hands = [];
+		foreach($this->handEquities as $handStrength)
+		{
+			$strength = $this->getHandStrength($handStrength->getHand());
+			if($strength >= $min && $strength <= $max)
+			{
+				$hands[] = $handStrength->getHand();
+			}
+		}
+		return $hands;
+	}
+
+	/*
 	 * Gets the array of calculated equities for each hand in range.
 	 */
 	public function getRangeStrength(): array
