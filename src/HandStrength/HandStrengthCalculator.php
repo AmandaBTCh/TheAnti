@@ -86,9 +86,9 @@ class HandStrengthCalculator
 				//Get the data from the evaluator
 				$handEquities = explode(",", $line);
 				$handString = $handEquities[0];
-				$handWins = $handEquities[1];
-				$handTies = $handEquities[2];
-				$handTotal = $handEquities[3];
+				$handWins = (int) $handEquities[1];
+				$handTies = (int) $handEquities[2];
+				$handTotal = (int) $handEquities[3];
 
 				//Create the object to represent the hand's strength
 				$hand = Hand::importFromString($handString);

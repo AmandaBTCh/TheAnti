@@ -6,6 +6,9 @@ use TheAnti\GameElement\Board;
 use TheAnti\GameElement\Deck;
 use TheAnti\GameElement\Hand;
 use TheAnti\Player\Player;
+use TheAnti\Range\Range;
+use TheAnti\Range\WeightedHand;
+use TheAnti\HandStrength\HandStrengthCalculator;
 
 /*
  * This class represents a round of Texas Hold'em.
@@ -23,7 +26,7 @@ class Round
 	 * [1, 2] is how it always starts as this is for the blinds.
 	 * If one player puts money into the pot, and the next player puts in 0,
 	 * that means they folded.
-	 * If a player puts 0 in in other circmstances, it means
+	 * If a player puts 0 in any other circumstances, it means
 	 * that they checked.
 	 */
 	protected $actions = [];
@@ -65,7 +68,15 @@ class Round
 		$this->dealCards();
 
 		//Get player action!
-		//...
+		/*
+		while($this->actionIsNeeded())
+		{
+			$this->getAction();
+		}
+		*/
+
+		//Award pot to winning player(s)
+		$this->awardPot();
 
 		//Update player positions
 		$this->match->moveButton();
@@ -120,6 +131,67 @@ class Round
 		{
 			$this->match->getPlayers()[$key]->broadcast("Gets dealt hand " . $hand->toString() . ".");
 			$this->match->getPlayers()[$key]->setHand($hand);
+		}
+	}
+
+	/*
+	 * Awards the pot to the winning player(s).
+	 */
+	public function awardPot()
+	{
+		//Get the players
+		$players = $this->match->getPlayers();
+
+		//Gets the hands
+		$hands = [
+			$players[0]->getHand(),
+			$players[1]->getHand()
+		];
+
+		//Build the range
+		$range = new Range();
+		$weightedHands = [];
+		foreach($hands as $hand)
+		{
+			$weightedHands[] = new WeightedHand($hand, 1.0);
+		}
+		$range->addWeightedHands($weightedHands);
+
+		//Calculate the hand strengths
+		$ha = new HandStrengthCalculator($this->board, $range);
+		$ha->calculate();
+
+		$handStrengths = array_values($ha->getRangeStrength());
+
+		//It's a tie
+		if($handStrengths[0]->getWin() == $handStrengths[1]->getWin())
+		{
+			foreach($this->match->getPlayers() as $player)
+			{
+				$stack = $player->getStack();
+				$stack += $this->pot / 2;
+				$player->setStack($stack);
+				$player->broadcast("Wins $" . ($this->pot / 2) . ".");
+			}
+		}
+
+		//The higher hand wins
+		else
+		{
+			$winningHand = $handStrengths[1]->getHand();
+			print "Winning hand: " . $winningHand->toString() . "\n";
+			foreach($this->match->getPlayers() as $player)
+			{
+				$playerHand = $player->getHand();
+				print "Player hand: " . $playerHand->toString() . "\n";
+				if($winningHand->toString() == $playerHand->toString())
+				{
+					$stack = $player->getStack();
+					$stack += $this->pot;
+					$player->setStack($stack);
+					$player->broadcast("Wins $" . ($this->pot) . ".");
+				}
+			}
 		}
 	}
 

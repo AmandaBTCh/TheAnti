@@ -38,6 +38,14 @@ class HandStrength
 	}
 
 	/*
+	 * Gets the hand.
+	 */
+	public function getHand(): Hand
+	{
+		return $this->hand;
+	}
+
+	/*
 	 * Gets the win percentage.
 	 */
 	public function getWin(): float

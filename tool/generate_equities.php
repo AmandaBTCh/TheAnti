@@ -12,7 +12,7 @@ $handFile = $_GET["handFile"];
 $board = $_GET["board"] ?? "";
 
 //If we weren't given a board, return the preflop equity file
-if($board == "" && file_exists("equities/pre.txt"))
+if($board == "" && file_exists("equities/pre.txt") && false)
 {
 	print file_get_contents("equities/pre.txt");
 }
@@ -28,7 +28,7 @@ else
 	$results = chop($results);
 
 	//Cache preflop equities
-	if($board == "")
+	if($board == "" && false)
 	{
 		file_put_contents("equities/pre.txt", $results);
 	}
