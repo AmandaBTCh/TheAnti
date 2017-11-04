@@ -22,6 +22,9 @@ abstract class Player
 	//@var Range The player's range/perceived range.
 	protected $range = NULL;
 
+	//@var bool Specifies if the player has folded.
+	protected $folded = false;
+
 	/*
 	 * Creates a player with a stack.
 	 */
@@ -104,6 +107,22 @@ abstract class Player
 	{
 		$reflection = new \ReflectionClass($this);
 		print $reflection->getShortName() . ": $message\n";
+	}
+
+	/*
+	 * Determines if the player has folded.
+	 */
+	public function isFolded(): bool
+	{
+		return $this->folded;
+	}
+
+	/*
+	 * Sets the player to be folded or unfolded.
+	 */
+	public function setFolded(bool $folded = true)
+	{
+		$this->folded = $folded;
 	}
 
 	/*

@@ -17,17 +17,9 @@ class Round
 	protected $match = NULL;
 
 	/*
-	 * @var array The action that has taken place this round.
-	 * This is really only an array of integers, where each
-	 * one represents the amount of money that a player put
-	 * into the pot.
-	 * [1, 2] is how it always starts as this is for the blinds.
-	 * If one player puts money into the pot, and the next player puts in 0,
-	 * that means they folded.
-	 * If a player puts 0 in any other circumstances, it means
-	 * that they checked.
+	 * @var Action The action that has taken place this round.
 	 */
-	protected $actions = [];
+	protected $action = NULL;
 
 	//@var Board The board.
 	protected $board = NULL;
@@ -46,6 +38,7 @@ class Round
 		$this->match = $match;
 		$this->board = new Board();
 		$this->deck = new Deck();
+		$this->action = new Action();
 	}
 
 	/*
@@ -67,39 +60,31 @@ class Round
 		$this->dealCards();
 
 		//Preflop action
-		/*
-		while($this->actionIsNeeded())
+		while($this->isActionNeeded())
 		{
-			$this->getAction();
+			//$this->getAction();
 		}
-		*/
 
 		//Flop action
 		$this->burnAndTurn(3);
-		/*
-		while($this->actionIsNeeded())
+		while($this->isActionNeeded())
 		{
-			$this->getAction();
+			//$this->getAction();
 		}
-		*/
 
 		//Turn action
 		$this->burnAndTurn();
-		/*
-		while($this->actionIsNeeded())
+		while($this->isActionNeeded())
 		{
-			$this->getAction();
+			//$this->getAction();
 		}
-		*/
 
 		//River action
 		$this->burnAndTurn();
-		/*
-		while($this->actionIsNeeded())
+		while($this->isActionNeeded())
 		{
-			$this->getAction();
+			//$this->getAction();
 		}
-		*/
 
 		//Award pot to winning player(s)
 		$this->awardPot();
@@ -133,8 +118,8 @@ class Round
 		);
 
 		//Update actions
-		$this->actions[] = 1;
-		$this->actions[] = 2;
+		$this->action->addAction(0, 0, $blinds[1]);
+		$this->action->addAction(1, 0, $blinds[0]);
 
 		//Update status
 		print "Pot is now \${$this->pot}.\n";
@@ -208,6 +193,36 @@ class Round
 
 		//Display board
 		print "Board: " . $this->board->toString() . "\n";
+	}
+
+	/*
+	 * Determines if action is needed from a player.
+	 * Action is needed if:
+	 * 1. The action object says so.
+	 * 2. The players are both in the hand.
+	 * 3. And both players are not all-in.
+	 */
+	public function isActionNeeded(): bool
+	{
+		$players = $this->match->getPlayers();
+
+		//Both are all-in
+		if(!($players[0]->getStack() || $players[1]->getStack()))
+		{
+			return false;
+		}
+
+		//A player has folded
+		else if($players[0]->isFolded() || $players[1]->isFolded())
+		{
+			return false;
+		}
+
+		//Defer to the action object
+		else
+		{
+			return $this->action->isActionNeeded(count($this->board->getCards()));
+		}
 	}
 
 	/*

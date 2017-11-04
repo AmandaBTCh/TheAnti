@@ -60,9 +60,9 @@ class Action
 		{
 			foreach($streetActions as $streetAction)
 			{
-				if(isset($totals[$streetAction[0]]))
+				if(!isset($totals[$streetAction[0]]))
 				{
-					$totals[$streetAction[0]] = 0;
+					$totals[$streetAction[0]] = $streetAction[1];
 				}
 
 				else
@@ -77,7 +77,7 @@ class Action
 	/*
 	 * Get amount needed to call for a player.
 	 */
-	public function getCallAmountForPlayer(int $player)
+	public function getCallAmountForPlayer(int $player): int
 	{
 		//Get how much the player bet
 		$totals = $this->getTotalBets();
@@ -87,5 +87,35 @@ class Action
 		$maxBet = max($totals);
 
 		return $maxBet - $playerBet;
+	}
+
+	/*
+	 * Determines if any action is needed from our perspective.
+	 * An action is needed if:
+	 * 1. The total betsize for all players is not equal.
+	 * 2. A player has taken no action on the latest street.
+	 * This class, however, doesn't know if a player has folded,
+	 * or if both are all-in, so this will have to be checked higher up.
+	 */
+	public function isActionNeeded(int $street): bool
+	{
+		$totals = $this->getTotalBets();
+
+		print "Max - Min: " . (max($totals) - min($totals)) . "\n";
+
+		//If the diff is non-zero, then someone needs to fold/call/raise
+		if(max($totals) - min($totals))
+		{
+			return true;
+		}
+
+		//We need at least 2 actions in the street that we're in, 1+ for each player
+		else
+		{
+			$streetActions = $this->getActions($street);
+
+			//Preflop is special since all players have made actions by posting
+			return count($streetActions) >= ($street == 0 ? 4 : 2);
+		}
 	}
 }
