@@ -55,4 +55,17 @@ class Board
 	{
 		return $this->cards;
 	}
+
+	/*
+	 * Gets the string representation of the board.
+	 */
+	public function toString(): string
+	{
+		$board = "";
+		foreach($this->cards as $card)
+		{
+			$board .= $card->toString();
+		}
+		return $board;
+	}
 }
