@@ -4,6 +4,7 @@ namespace TheAnti\Player;
 
 use TheAnti\GameElement\Hand;
 use TheAnti\Range\Range;
+use TheAnti\Situation\Situation;
 
 /*
  * The abstract base class for all players, both human and computer.
@@ -15,6 +16,9 @@ abstract class Player
 
 	//@var int The stack of the player.
 	protected $stack = 0;
+
+	//@var int The starting stack.
+	protected $startingStack = 0;
 
 	//@var Hand The player's hand.
 	protected $hand = NULL;
@@ -30,6 +34,7 @@ abstract class Player
 	 */
 	public function __construct(int $stack, int $bankroll = 0)
 	{
+		$this->startingStack = $stack;
 		$this->setStack($stack);
 		$this->setBankroll($bankroll);
 	}
@@ -48,6 +53,21 @@ abstract class Player
 	public function getStack(): int
 	{
 		return $this->stack;
+	}
+
+	/*
+	 * Resets the stack, using the bankroll.
+	 */
+	public function resetStack()
+	{
+		$topUp = $this->startingStack - $this->stack;
+
+		if($topUp > 0)
+		{
+			$this->bankroll -= $topUp;
+		}
+
+		$this->stack += $topUp;
 	}
 
 	/*
@@ -126,25 +146,13 @@ abstract class Player
 	}
 
 	/*
-	 * Applies a decision to the player which will
-	 * affect the game/player's decision history and
-	 * also possibly the player's stack.
-	 * @return The size of the stack after the decision was made.
-	 * @todo Implement the Decision objects(s) or something similar.
-	 */
-	public function applyDecision($decision): int
-	{
-		return $this->stack;
-	}
-
-	/*
 	 * Based on the situation in the match, this determines what decision will
 	 * be made by the player.
 	 * For human players, this will of course, be showing them the situation
 	 * and asking for a decision via command entry.
 	 * For the computer players, this will be performed based on the various
 	 * logic/strategy classes that have not yet been implemented.
-	 * @todo Implement the situation/logic/strategy classes or something similar.
+	 * @return The betSize 0 = check/fold, >0 = call/raise
 	 */
-	abstract public function makeDecision($situation);
+	abstract public function makeDecision(Situation $situation): int;
 }

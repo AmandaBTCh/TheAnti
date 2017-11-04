@@ -13,6 +13,14 @@ class Board
 	protected $cards = [];
 
 	/*
+	 * Street constants.
+	 */
+	const PREFLOP	= 0;
+	const FLOP		= 3;
+	const TURN		= 4;
+	const RIVER		= 5;
+
+	/*
 	 * Creates a new board from an optional array of cards.
 	 */
 	public function __construct(array $cards = [])
@@ -54,6 +62,14 @@ class Board
 	public function getCards(): array
 	{
 		return $this->cards;
+	}
+
+	/*
+	 * Gets the street we're on.
+	 */
+	public function getStreet(): int
+	{
+		return count($this->cards);
 	}
 
 	/*

@@ -2,8 +2,6 @@
 
 namespace TheAnti\Match;
 
-use TheAnti\Player\Player;
-
 /*
  * Records the action that has taken place in the hand.
  */
@@ -100,8 +98,6 @@ class Action
 	public function isActionNeeded(int $street): bool
 	{
 		$totals = $this->getTotalBets();
-
-		print "Max - Min: " . (max($totals) - min($totals)) . "\n";
 
 		//If the diff is non-zero, then someone needs to fold/call/raise
 		if(max($totals) - min($totals))

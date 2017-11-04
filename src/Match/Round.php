@@ -7,6 +7,7 @@ use TheAnti\GameElement\Deck;
 use TheAnti\GameElement\Hand;
 use TheAnti\HandStrength\WinnerCalculator;
 use TheAnti\Player\Player;
+use TheAnti\Situation\Situation;
 
 /*
  * This class represents a round of Texas Hold'em.
@@ -59,31 +60,37 @@ class Round
 		//Deal cards
 		$this->dealCards();
 
+		//Keeps up with who we need to get action from
+		$actor = 0;
+
 		//Preflop action
 		while($this->isActionNeeded())
 		{
-			//$this->getAction();
+			$this->getAction($actor);
 		}
 
 		//Flop action
+		$actor = 1;
 		$this->burnAndTurn(3);
 		while($this->isActionNeeded())
 		{
-			//$this->getAction();
+			$this->getAction($actor);
 		}
 
 		//Turn action
+		$actor = 1;
 		$this->burnAndTurn();
 		while($this->isActionNeeded())
 		{
-			//$this->getAction();
+			$this->getAction($actor);
 		}
 
 		//River action
+		$actor = 1;
 		$this->burnAndTurn();
 		while($this->isActionNeeded())
 		{
-			//$this->getAction();
+			$this->getAction($actor);
 		}
 
 		//Award pot to winning player(s)
@@ -91,6 +98,9 @@ class Round
 
 		//Update player positions
 		$this->match->moveButton();
+
+		//Reset players
+		$this->resetPlayers();
 
 		print "Round over.\n";
 
@@ -153,31 +163,51 @@ class Round
 		//Get the players
 		$players = $this->match->getPlayers();
 
-		$winnerCalculator = new WinnerCalculator($players[0]->getHand(), $players[1]->getHand(), $this->board);
-		$winner = $winnerCalculator->calculate();
-
-		//It's a tie
-		if($winner == -1)
+		//Check to see if one of them has folded.
+		$foldedPlayer = $players[0]->isFolded() ? 0 : ($players[1]->isFolded() ? 1 : -1);
+		if($foldedPlayer != -1)
 		{
-			foreach($this->match->getPlayers() as $player)
+			$this->awardPotToPlayers([$players[(int) !$foldedPlayer]]);
+		}
+
+		//We need to find out who won/tied
+		else
+		{
+
+			$winnerCalculator = new WinnerCalculator($players[0]->getHand(), $players[1]->getHand(), $this->board);
+			$winner = $winnerCalculator->calculate();
+
+			//It's a tie
+			if($winner == -1)
 			{
-				$stack = $player->getStack();
-				$stack += $this->pot / 2;
-				$player->setStack($stack);
-				$player->broadcast("Wins $" . ($this->pot / 2) . ".");
+				$this->awardPotToplayers($players);
+			}
+
+			//The higher hand wins
+			else
+			{
+				$this->awardPotToplayers([$players[$winner]]);
 			}
 		}
 
-		//The higher hand wins
-		else
-		{
-			$stack = $players[$winner]->getStack();
-			$stack += $this->pot;
-			$players[$winner]->setStack($stack);
-			$players[$winner]->broadcast("Wins $" . ($this->pot) . ".");
-		}
-
 		$this->pot = 0;
+	}
+
+	/*
+	 * Awards the pot to a specific set of players.
+	 * The pot is evenly divided among the players passed in.
+	 */
+	public function awardPotToPlayers(array $players)
+	{
+		//Yeah, yeah, we lose some small amount of money, who cares.
+		$winAmount = floor($this->pot / count($players));
+
+		foreach($players as $player)
+		{
+			$stack = $player->getStack();
+			$player->setStack($stack + $winAmount);
+			$player->broadcast("Wins $" . ($winAmount) . ".");
+		}
 	}
 
 	/*
@@ -222,6 +252,39 @@ class Round
 		else
 		{
 			return $this->action->isActionNeeded(count($this->board->getCards()));
+		}
+	}
+
+	/*
+	 * Gets the decision for human/AI decision making.
+	 */
+	public function getSituation(): Situation
+	{
+		return new Situation();
+	}
+
+	/*
+	 * Gets action from a player and adds it to the round's actions.
+	 */
+	public function getAction(int $playerIndex)
+	{
+		$player = $this->match->getPlayers()[$playerIndex];
+
+		$situation = $this->getSituation();
+
+		$betSize = $player->makeDecision($situation);
+		$this->action->addAction($playerIndex, $this->board->getStreet(), $betSize);
+	}
+
+	/*
+	 * Resets players for a new round.
+	 */
+	public function resetPlayers()
+	{
+		foreach($this->match->getPlayers() as $player)
+		{
+			$player->resetStack();
+			$player->setFolded(false);
 		}
 	}
 

@@ -2,15 +2,13 @@
 
 namespace TheAnti\Player;
 
+use TheAnti\Situation\Situation;
+
 class Human extends Player
 {
-	public function makeDecision($situation)
+	public function makeDecision(Situation $situation): int
 	{
-
-	}
-
-	public function applyDecision($decision): int
-	{
-		return NULL;
+		$this->setFolded();
+		return 0;
 	}
 }

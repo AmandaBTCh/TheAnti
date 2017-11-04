@@ -4,8 +4,8 @@ namespace TheAnti\Situation;
 
 class Situation
 {
-	//@var array The action that has taken place so far.
-	protected $action = [];
+	//@var Action The action that has taken place so far.
+	protected $action = NULL;
 
 	//@var HandAnalyser Info about the hand.
 	protected $handAnalyzer = NULL;
