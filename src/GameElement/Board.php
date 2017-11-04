@@ -33,7 +33,7 @@ class Board
 		}
 
 		//Verify that this operation resulted in a valid board
-		$count = count($cards);
+		$count = count($this->cards);
 		if(!in_array($count, [0, 3, 4, 5]))
 		{
 			throw new \Exception("Can't create a board with $count cards!");

@@ -42,6 +42,6 @@ class WinnerCalculator
 	public function calculate(): int
 	{
 		$board = $this->board->toString();
-		return (int) file_get_contents("http://localhost/poker/TheAnti/tool/calculate_winner.php?omp={$this->ompEval}&hand1={$this->hand1}&hand2={$this->hand2}&board={$board}");
+		return (int) file_get_contents("http://localhost/poker/TheAnti/tool/calculate_winner.php?omp={$this->ompEval}&hand1={$this->hand1->toString()}&hand2={$this->hand2->toString()}&board={$board}");
 	}
 }

@@ -5,10 +5,8 @@ namespace TheAnti\Match;
 use TheAnti\GameElement\Board;
 use TheAnti\GameElement\Deck;
 use TheAnti\GameElement\Hand;
+use TheAnti\HandStrength\WinnerCalculator;
 use TheAnti\Player\Player;
-use TheAnti\Range\Range;
-use TheAnti\Range\WeightedHand;
-use TheAnti\HandStrength\HandStrengthCalculator;
 
 /*
  * This class represents a round of Texas Hold'em.
@@ -38,6 +36,7 @@ class Round
 	protected $pot = 0;
 
 	//@var Deck The deck for this round.
+	protected $deck = NULL;
 
 	/*
 	 * Creates a new round.
@@ -67,7 +66,34 @@ class Round
 		//Deal cards
 		$this->dealCards();
 
-		//Get player action!
+		//Preflop action
+		/*
+		while($this->actionIsNeeded())
+		{
+			$this->getAction();
+		}
+		*/
+
+		//Flop action
+		$this->burnAndTurn(3);
+		/*
+		while($this->actionIsNeeded())
+		{
+			$this->getAction();
+		}
+		*/
+
+		//Turn action
+		$this->burnAndTurn();
+		/*
+		while($this->actionIsNeeded())
+		{
+			$this->getAction();
+		}
+		*/
+
+		//River action
+		$this->burnAndTurn();
 		/*
 		while($this->actionIsNeeded())
 		{
@@ -142,29 +168,11 @@ class Round
 		//Get the players
 		$players = $this->match->getPlayers();
 
-		//Gets the hands
-		$hands = [
-			$players[0]->getHand(),
-			$players[1]->getHand()
-		];
-
-		//Build the range
-		$range = new Range();
-		$weightedHands = [];
-		foreach($hands as $hand)
-		{
-			$weightedHands[] = new WeightedHand($hand, 1.0);
-		}
-		$range->addWeightedHands($weightedHands);
-
-		//Calculate the hand strengths
-		$ha = new HandStrengthCalculator($this->board, $range);
-		$ha->calculate();
-
-		$handStrengths = array_values($ha->getRangeStrength());
+		$winnerCalculator = new WinnerCalculator($players[0]->getHand(), $players[1]->getHand(), $this->board);
+		$winner = $winnerCalculator->calculate();
 
 		//It's a tie
-		if($handStrengths[0]->getWin() == $handStrengths[1]->getWin())
+		if($winner == -1)
 		{
 			foreach($this->match->getPlayers() as $player)
 			{
@@ -178,21 +186,28 @@ class Round
 		//The higher hand wins
 		else
 		{
-			$winningHand = $handStrengths[1]->getHand();
-			print "Winning hand: " . $winningHand->toString() . "\n";
-			foreach($this->match->getPlayers() as $player)
-			{
-				$playerHand = $player->getHand();
-				print "Player hand: " . $playerHand->toString() . "\n";
-				if($winningHand->toString() == $playerHand->toString())
-				{
-					$stack = $player->getStack();
-					$stack += $this->pot;
-					$player->setStack($stack);
-					$player->broadcast("Wins $" . ($this->pot) . ".");
-				}
-			}
+			$stack = $players[$winner]->getStack();
+			$stack += $this->pot;
+			$players[$winner]->setStack($stack);
+			$players[$winner]->broadcast("Wins $" . ($this->pot) . ".");
 		}
+
+		$this->pot = 0;
+	}
+
+	/*
+	 * Burns and turns cards.
+	 */
+	public function burnAndTurn(int $cards = 1)
+	{
+		//Burn
+		$this->deck->getCard();
+
+		//Turn cards
+		$this->board->addCards($this->deck->getCards($cards));
+
+		//Display board
+		print "Board: " . $this->board->toString() . "\n";
 	}
 
 	/*
