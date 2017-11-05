@@ -28,7 +28,7 @@ class PreFlopStrategy extends Strategy
 		 * A. button
 		 * B. limped to us
 		 */
-		if($this->player->isAggressor())
+		if($this->situation->player->isAggressor())
 		{
 			//Button: raise 70% of hands
 			if($this->situation->playerIndex == 0)
@@ -120,7 +120,7 @@ class PreFlopStrategy extends Strategy
 			else
 			{
 				$wd = new WeightedDecision();
-				$wd->setDecision(WeightedDecision::CHECK, 1.0);
+				$wd->setDecision(WeightedDecision::FOLD, 1.0);
 			}
 
 			return $wd;

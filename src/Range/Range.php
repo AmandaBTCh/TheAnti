@@ -31,7 +31,7 @@ class Range
 	 * @return double Between 0 and 1 depending on how likely it is to be in
 	 * our range.
 	 */
-	public function getHandWeight(Hand $hand): double
+	public function getHandWeight(Hand $hand): float
 	{
 		$handHash = $hand->toString();
 

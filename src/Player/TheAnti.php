@@ -41,7 +41,7 @@ class TheAnti extends Computer
 			//Raise
 			else
 			{
-				return ($situation->pot + $callAmount * 2) / 0.7;
+				return ($situation->pot + $callAmount * 2) * 0.7;
 			}
 		}
 	}

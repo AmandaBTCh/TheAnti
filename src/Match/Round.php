@@ -10,6 +10,7 @@ use TheAnti\HandStrength\HandStrengthCalculator;
 use TheAnti\HandStrength\WinnerCalculator;
 use TheAnti\Player\Player;
 use TheAnti\PotOdds\PotOddsCalculator;
+use TheAnti\Range\Range;
 use TheAnti\Situation\Situation;
 
 /*
@@ -54,6 +55,9 @@ class Round
 
 		print "Starting round...\n";
 
+		//Reset players
+		$this->resetPlayers();
+
 		//Shuffle the deck
 		$this->deck->shuffle();
 
@@ -66,11 +70,16 @@ class Round
 		//Keeps up with who we need to get action from
 		$actor = 0;
 
+		//Set the aggressor to the button
+		$this->match->getPlayers()[0]->setAggressor();
+
 		//Preflop action
 		while($this->isActionNeeded())
 		{
 			$this->getAction($actor);
 		}
+
+		/*
 
 		//Flop action
 		$actor = 1;
@@ -96,14 +105,19 @@ class Round
 			$this->getAction($actor);
 		}
 
+		*/
+
 		//Award pot to winning player(s)
-		$this->awardPot();
+		//$this->awardPot();
 
 		//Update player positions
 		$this->match->moveButton();
 
 		//Reset players
 		$this->resetPlayers();
+
+		$this->action = new Action();
+		$this->pot = 0;
 
 		print "Round over.\n";
 
@@ -239,6 +253,7 @@ class Round
 		//Both are all-in
 		if(!($players[0]->getStack() || $players[1]->getStack()))
 		{
+			print "All in!\n";
 			return false;
 		}
 
@@ -353,6 +368,10 @@ class Round
 		{
 			$player->resetStack();
 			$player->setFolded(false);
+
+			$range = new Range();
+			$range->importHands(__DIR__ . "/../../tool/ranges/all_hands.txt");
+			$player->setRange($range);
 		}
 	}
 

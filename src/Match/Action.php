@@ -111,7 +111,7 @@ class Action
 			$streetActions = $this->getActions($street);
 
 			//Preflop is special since all players have made actions by posting
-			return count($streetActions) >= ($street == 0 ? 4 : 2);
+			return count($streetActions) < ($street == 0 ? 4 : 2);
 		}
 	}
 }
