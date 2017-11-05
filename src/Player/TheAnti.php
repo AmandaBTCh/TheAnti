@@ -4,11 +4,14 @@ namespace TheAnti\Player;
 
 use TheAnti\Situation\Situation;
 use TheAnti\Strategy\StrategyManager;
+use TheAnti\WeightedDecision\WeightedDecision;
 
 class TheAnti extends Computer
 {
 	public function makeDecision(Situation $situation): int
 	{
+		$callAmount = $situation->action->getCallAmountForPlayer($situation->playerIndex);
+
 		$strategyManager = new StrategyManager($situation);
 		$strategies = $strategyManager->getStrategies();
 
@@ -23,10 +26,23 @@ class TheAnti extends Computer
 			$weightedDecision = $strategies[0]->getWeightedDecision();
 			$decision = $weightedDecision->getDecision();
 
-			print "Made decision: " . $decision . ".\n";
-		}
+			//Check/fold
+			if($decision == WeightedDecision::CHECK || $decision == WeightedDecision::CHECK)
+			{
+				return 0;
+			}
 
-		//Super nit (fold/check)
-		return 0;
+			//Call
+			else if($decision == WeightedDecision::CALL)
+			{
+				return $callAmount;
+			}
+
+			//Raise
+			else
+			{
+				return ($situation->pot + $callAmount * 2) / 0.7;
+			}
+		}
 	}
 }

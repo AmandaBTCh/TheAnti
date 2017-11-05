@@ -103,6 +103,19 @@ class Range
 	}
 
 	/*
+	 * Adds a number of hands to our range.
+	 * These all have a wight of 1.0 as they are always in our range.
+	 */
+	public function addHands(array $hands)
+	{
+		foreach($hands as $hand)
+		{
+			$weightedHand = new WeightedHand($hand, 1.0);
+			$this->addWeightedHands([$weightedHand]);
+		}
+	}
+
+	/*
 	 * Removes an array of hands from the range.
 	 */
 	public function removeWeightedHands(array $weightedHands)

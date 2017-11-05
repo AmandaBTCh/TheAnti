@@ -18,6 +18,12 @@ class Situation
 	//@var int The player index for the player this gets passed to.
 	public $playerIndex = NULL;
 
+	//@var Player The primary player.
+	public $player = NULL;
+
+	//@var Player The opponent player.
+	public $opponent = NULL;
+
 	//@var Action The action that has taken place so far.
 	public $action = NULL;
 

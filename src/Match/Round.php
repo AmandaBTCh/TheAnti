@@ -6,6 +6,7 @@ use TheAnti\BoardAnalysis\BoardAnalyzer;
 use TheAnti\GameElement\Board;
 use TheAnti\GameElement\Deck;
 use TheAnti\GameElement\Hand;
+use TheAnti\HandStrength\HandStrengthCalculator;
 use TheAnti\HandStrength\WinnerCalculator;
 use TheAnti\Player\Player;
 use TheAnti\PotOdds\PotOddsCalculator;
@@ -263,9 +264,12 @@ class Round
 		$situation->action = $this->action;
 		$situation->pot = $this->pot;
 		$situation->playerIndex = $playerIndex;
+		$situation->player = $this->match->getPlayers()[$playerIndex];
+		$situation->opponent = $this->match->getPlayers()[!$playerIndex];
 		$betAmount = $this->action->getCallAmountForPlayer($playerIndex);
 		$situation->potOddsCalculator = new PotOddsCalculator($this->pot - $betAmount, $betAmount);
 		$situation->boardAnalyzer = new BoardAnalyzer($this->board);
+		$situation->handStrengthCalculator = new HandStrengthCalculator($this->board, $situation->player->getRange());
 		return $situation;
 	}
 
