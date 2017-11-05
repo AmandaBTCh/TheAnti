@@ -1,6 +1,7 @@
 <?php
 
 namespace TheAnti\Strategy;
+
 use TheAnti\Situation\Situation;
 use TheAnti\WeightedDecision\WeightedDecision;
 

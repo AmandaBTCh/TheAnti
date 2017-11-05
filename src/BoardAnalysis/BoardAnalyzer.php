@@ -47,9 +47,17 @@ class BoardAnalyzer
 
 	/*
 	 * Gets info about paired boards based on board texture.
-*/
+	*/
 	public function getPairedInfo(): Paired
 	{
 		return new Paired($this->board);
+	}
+
+	/*
+	 * Gets the street.
+	 */
+	public function getStreet(): int
+	{
+		return $this->board->getStreet();
 	}
 }

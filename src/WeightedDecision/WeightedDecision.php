@@ -67,7 +67,7 @@ class WeightedDecision
 		 * case, we need to execute one at random.
 		 * To make it easy, we'll lean on the site of aggression.
 		 *
-		 * But for now I'm going to throw an exception since it shouldnot often
+		 * But for now I'm going to throw an exception since it should not often
 		 * happen and for testing/development, I want to make sure everything is
 		 * okay.
 		 */

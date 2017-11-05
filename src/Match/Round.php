@@ -2,6 +2,7 @@
 
 namespace TheAnti\Match;
 
+use TheAnti\BoardAnalysis\BoardAnalyzer;
 use TheAnti\GameElement\Board;
 use TheAnti\GameElement\Deck;
 use TheAnti\GameElement\Hand;
@@ -264,6 +265,7 @@ class Round
 		$situation->playerIndex = $playerIndex;
 		$betAmount = $this->action->getCallAmountForPlayer($playerIndex);
 		$situation->potOddsCalculator = new PotOddsCalculator($this->pot - $betAmount, $betAmount);
+		$situation->boardAnalyzer = new BoardAnalyzer($this->board);
 		return $situation;
 	}
 
