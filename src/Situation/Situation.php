@@ -2,20 +2,37 @@
 
 namespace TheAnti\Situation;
 
+/*
+ * Represents the current situation in a round.
+ * This is used by the AI/Human in order to make decisions.
+ * It's currently more of a struct than a class,
+ * as I really only need a convenient way to pass a bunch of assorted info
+ * around.
+ * This will be updated later.
+ */
 class Situation
 {
+	//@var int The pot
+	public $pot = 0;
+
+	//@var int The player index for the player this gets passed to.
+	public $playerIndex = NULL;
+
 	//@var Action The action that has taken place so far.
-	protected $action = NULL;
+	public $action = NULL;
 
 	//@var HandAnalyser Info about the hand.
-	protected $handAnalyzer = NULL;
+	public $handAnalyzer = NULL;
 
-	//@var BoardAnalyzer Info ab out the board.
-	protected $boardAnalyzer = NULL;
+	//@var BoardAnalyze Info ab out the board.
+	public $boardAnalyzer = NULL;
 
 	//@var HandStrengthCalculator Gets the equity of our hand against our range.
-	protected $handStrengthCalculator = NULL;
+	public $handStrengthCalculator = NULL;
 
 	//@var SPRAnalyzer Gets info about the player's stacks vs. the pot
-	protected $sprAnalyzer = NULL;
+	public $sprAnalyzer = NULL;
+
+	//@var PotOddsCalculator Gets info about pot odds.
+	public $potOddsCalculator = NULL;
 }

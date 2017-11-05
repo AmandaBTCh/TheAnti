@@ -60,6 +60,6 @@ class PotOddsCalculator
 	 */
 	public function getContinuingFrequency(): float
 	{
-		return 100.0 - ($this->getPotOdds() * 2);
+		return 100.0 - ($this->getPotOdds() * 200);
 	}
 }

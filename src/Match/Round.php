@@ -7,6 +7,7 @@ use TheAnti\GameElement\Deck;
 use TheAnti\GameElement\Hand;
 use TheAnti\HandStrength\WinnerCalculator;
 use TheAnti\Player\Player;
+use TheAnti\PotOdds\PotOddsCalculator;
 use TheAnti\Situation\Situation;
 
 /*
@@ -130,9 +131,6 @@ class Round
 		//Update actions
 		$this->action->addAction(0, 0, $blinds[1]);
 		$this->action->addAction(1, 0, $blinds[0]);
-
-		//Update status
-		print "Pot is now \${$this->pot}.\n";
 
 		print "\n";
 	}
@@ -258,9 +256,15 @@ class Round
 	/*
 	 * Gets the decision for human/AI decision making.
 	 */
-	public function getSituation(): Situation
+	public function getSituation(int $playerIndex): Situation
 	{
-		return new Situation();
+		$situation = new Situation;
+		$situation->action = $this->action;
+		$situation->pot = $this->pot;
+		$situation->playerIndex = $playerIndex;
+		$betAmount = $this->action->getCallAmountForPlayer($playerIndex);
+		$situation->potOddsCalculator = new PotOddsCalculator($this->pot - $betAmount, $betAmount);
+		return $situation;
 	}
 
 	/*
@@ -270,7 +274,7 @@ class Round
 	{
 		$player = $this->match->getPlayers()[$playerIndex];
 
-		$situation = $this->getSituation();
+		$situation = $this->getSituation($playerIndex);
 
 		$betSize = $player->makeDecision($situation);
 		$this->action->addAction($playerIndex, $this->board->getStreet(), $betSize);

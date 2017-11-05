@@ -26,4 +26,39 @@ class Prompt
 		while(!in_array($answer = strtolower(readline($prompt)[0]), ['y', 'n']));
 		return $answer == 'y';
 	}
+
+	/*
+	 * Gets an action in a poker hand.
+	 */
+	public function getAction(array $actions): string
+	{
+		$actionsString = implode("|", $actions);
+		$valid = false;
+		do
+		{
+			$action = trim(strtolower(readline("Make decision ($actionsString): ")));
+			if($action == "check" && in_array($action, $actions))
+			{
+				$valid = true;
+			}
+
+			else if($action == "call" && in_array($action, $actions))
+			{
+				$valid = true;
+			}
+
+			else if($action == "fold" && in_array($action, $actions))
+			{
+				$valid = true;
+			}
+
+			else if(preg_match("/raise [0-9]+/", $action) && in_array("raise", $actions))
+			{
+				$valid = true;
+				$action = explode(" ", $action)[1];
+			}
+		} while(!$valid);
+
+		return $action;
+	}
 }
