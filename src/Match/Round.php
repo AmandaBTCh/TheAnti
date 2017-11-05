@@ -270,14 +270,72 @@ class Round
 	/*
 	 * Gets action from a player and adds it to the round's actions.
 	 */
-	public function getAction(int $playerIndex)
+	public function getAction(int &$playerIndex)
 	{
 		$player = $this->match->getPlayers()[$playerIndex];
+		$opponent = $this->match->getPlayers()[!$playerIndex];
 
 		$situation = $this->getSituation($playerIndex);
 
+		$callAmount = $this->action->getCallAmountForPlayer($playerIndex);
 		$betSize = $player->makeDecision($situation);
+
+		if($callAmount)
+		{
+			//Call
+			if($betSize == $callAmount)
+			{
+				$player->setAggressor(false);
+				$opponent->setAggressor(true);
+				$this->getMoneyFromPlayer($player, $callAmount);
+				$this->addToPot($callAmount);
+				print $player->broadcast("Calls $$callAmount.\n");
+			}
+
+			//Raise
+			else if($betSize > $callAmount)
+			{
+				$player->setAggressor(true);
+				$opponent->setAggressor(false);
+				$this->getMoneyFromPlayer($player, $betSize);
+				$this->addToPot($betSize);
+				print $player->broadcast("Raises to $betSize.\n");
+			}
+
+			//Fold
+			else
+			{
+				$player->setFolded(true);
+				print $player->broadcast("Folds.\n");
+			}
+		}
+
+		else
+		{
+			//Raise
+			if($betSize > 0)
+			{
+				$player->setAggressor(true);
+				$opponent->setAggressor(false);
+				$this->getMoneyFromPlayer($player, $betSize);
+				$this->addToPot($betSize);
+				print $player->broadcast("Bets $betSize.\n");
+			}
+
+			//Check
+			else
+			{
+				$player->setAggressor(false);
+				$opponent->setAggressor(true);
+				print $player->broadcast("Checks.\n");
+			}
+		}
+
+		//Add the action
 		$this->action->addAction($playerIndex, $this->board->getStreet(), $betSize);
+
+		//Switch player who needs to act
+		$playerIndex = !$playerIndex;
 	}
 
 	/*

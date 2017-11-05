@@ -8,8 +8,7 @@ class TheAnti extends Computer
 {
 	public function makeDecision(Situation $situation): int
 	{
-		//Super nit
-		$this->setFolded();
+		//Super nit (fold/check)
 		return 0;
 	}
 }

@@ -34,7 +34,6 @@ class Human extends Player
 
 			else if($action == "fold")
 			{
-				$this->setFolded();
 				return 0;
 			}
 

@@ -29,6 +29,9 @@ abstract class Player
 	//@var bool Specifies if the player has folded.
 	protected $folded = false;
 
+	//@var bool Specifies if we are the aggressor in the hand.
+	protected $aggressor = false;
+
 	/*
 	 * Creates a player with a stack.
 	 */
@@ -143,6 +146,22 @@ abstract class Player
 	public function setFolded(bool $folded = true)
 	{
 		$this->folded = $folded;
+	}
+
+	/*
+	 * Sets the player to be/not be the aggressor.
+	 */
+	public function setAggressor(bool $aggressor = true)
+	{
+		$this->aggressor = $aggressor;
+	}
+
+	/*
+	 * Determines if we are the aggressor in the hand.
+	 */
+	public function isAggressor(): bool
+	{
+		return $this->aggressor;
 	}
 
 	/*
